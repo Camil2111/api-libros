@@ -31,14 +31,23 @@ app.use((req, res, next) => {
 
 // Crear libro
 app.post("/libros", async (req, res) => {
-    const libro = new Libro(req.body);
+    console.log("📦 Body recibido:", req.body);
+
+    const libro = new Libro({
+        titulo: req.body.titulo,
+        autor: req.body.autor,
+    });
+
     try {
-        await libro.save();
-        res.status(201).json(libro);
+        const resultado = await libro.save();
+        console.log("✅ Libro guardado:", resultado);
+        res.status(201).json(resultado);
     } catch (error) {
+        console.error("❌ Error al guardar el libro:", error);
         res.status(500).send("Error al guardar el libro");
     }
 });
+
 
 // Listar todos
 app.get("/libros", async (req, res) => {
